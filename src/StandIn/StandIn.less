@@ -1,0 +1,1093 @@
+// ── Palette · 3AM Film ───────────────────────────────────────────────────
+@bg:         #120d0a;        // warm black
+@bg_deep:    #0d0907;
+@bg_paper:   #f5e6c8;        // cream — action cards / paper
+@bg_paper_2: #e6d2a8;
+@ink:        #efe2cd;        // warm cream text on dark
+@ink_dim:    #a08b72;
+@ink_ghost:  #5a4a3c;
+@sepia:      #d4a574;        // film sepia
+@ember:      #c79567;
+@ember_hot:  #e8b878;
+@rose:       #c58a7a;        // faded rose
+@blood:      #9a4a44;
+@paper_ink:  #3a2c1e;
+@rule:       rgba(212, 165, 116, 0.32);
+
+// Display = large light italic; Body = readable serif.
+// 'Noto Serif SC' sits after the Latin face so CJK glyphs fall through to it
+// (Cormorant/Libre have no CJK glyphs → per-glyph fallback unifies the look).
+@display: 'Cormorant Garamond', 'Noto Serif SC', 'Iowan Old Style', Palatino, Georgia, serif;
+@body:    'Libre Baskerville', 'Noto Serif SC', 'Iowan Old Style', Georgia, serif;
+
+.tsi {
+  position: relative;
+  overflow: hidden;
+  background: @bg_deep;
+  color: @ink;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  font-family: @body;
+
+  // ── Light leak — warm wash bleeding from the top-left edge ──
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    background:
+      radial-gradient(130% 64% at 6% -10%, rgba(236, 188, 120, 0.26), transparent 48%),
+      radial-gradient(96% 54% at 102% 2%, rgba(197, 138, 122, 0.18), transparent 52%),
+      radial-gradient(70% 40% at 96% 102%, rgba(154, 74, 68, 0.10), transparent 55%);
+    mix-blend-mode: screen;
+    animation: tsi-leak-breathe 11s ease-in-out infinite;
+  }
+
+  // ── Film grain — animated noise over everything ──
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -50%;
+    z-index: 61;
+    pointer-events: none;
+    opacity: 0.085;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
+    animation: tsi-grain 0.7s steps(4) infinite;
+  }
+}
+
+@keyframes tsi-grain {
+  0%   { transform: translate(0, 0); }
+  25%  { transform: translate(-3%, 2%); }
+  50%  { transform: translate(2%, -3%); }
+  75%  { transform: translate(-2%, -2%); }
+  100% { transform: translate(3%, 2%); }
+}
+@keyframes tsi-leak-breathe {
+  0%, 100% { opacity: 0.7; }
+  50%      { opacity: 1; }
+}
+
+.tsi-screen {
+  position: absolute;
+  inset: 0;
+  padding: 48px 30px 32px;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+
+// Camera-style date burn-in, used on multiple screens
+.tsi-burn {
+  font-family: @body;
+  color: @sepia;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.72;
+  text-shadow: 0 0 8px rgba(212, 165, 116, 0.4);
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// AWAKE — a quiet bedroom before bed
+// ═══════════════════════════════════════════════════════════════════════
+.tsi-awake {
+  align-items: center;
+  position: relative;
+
+  &__lamp-glow {
+    position: absolute;
+    top: -140px;
+    right: -120px;
+    width: 380px;
+    height: 380px;
+    background: radial-gradient(closest-side, rgba(232, 184, 120, 0.20), rgba(232, 184, 120, 0));
+    pointer-events: none;
+  }
+
+  &__window {
+    position: absolute;
+    top: 0;
+    left: -24px;
+    width: 130px;
+    height: 190px;
+    border-right: 1px solid rgba(239, 226, 205, 0.05);
+    border-bottom: 1px solid rgba(239, 226, 205, 0.05);
+    overflow: hidden;
+    opacity: 0.55;
+  }
+
+  &__window-pane {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(90, 80, 70, 0.16), rgba(20, 16, 12, 0));
+    box-shadow: inset 0 0 24px rgba(239, 226, 205, 0.02);
+  }
+
+  &__clock {
+    position: relative;
+    color: @sepia;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    opacity: 0.72;
+    text-shadow: 0 0 8px rgba(212, 165, 116, 0.4);
+    margin-top: 4px;
+    margin-bottom: 40px;
+  }
+
+  &__frame {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 30px 26px 24px;
+    border-top: 1px solid @rule;
+    border-bottom: 1px solid @rule;
+    min-width: 230px;
+  }
+
+  &__avatar {
+    width: 88px;
+    height: 88px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 30% 28%, rgba(232, 184, 120, 0.26), transparent 60%),
+      linear-gradient(160deg, #2e2620, #18120d);
+    border: 1px solid rgba(212, 165, 116, 0.42);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      font-family: @display;
+      font-size: 40px;
+      font-style: italic;
+      font-weight: 500;
+      color: @ember_hot;
+      letter-spacing: 0.02em;
+      transform: translateY(-3px);
+    }
+  }
+
+  &__name {
+    font-family: @display;
+    font-size: 30px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    font-style: italic;
+  }
+
+  &__rule {
+    width: 30px;
+    height: 1px;
+    background: @rule;
+  }
+
+  &__bio {
+    font-family: @display;
+    font-size: 16px;
+    color: @ink_dim;
+    font-style: italic;
+    letter-spacing: 0.02em;
+  }
+
+  &__hint {
+    margin: 40px 14px 0;
+    font-family: @display;
+    font-style: italic;
+    text-align: center;
+    line-height: 1.5;
+    color: @ink_dim;
+    font-size: 18px;
+    letter-spacing: 0.01em;
+  }
+
+  &__btn {
+    margin: 32px auto 0;
+    padding: 14px 34px;
+    background: rgba(212, 165, 116, 0.05);
+    border: 1px solid @ember;
+    color: @ember_hot;
+    font-family: @display;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 19px;
+    letter-spacing: 0.05em;
+    border-radius: 2px;
+    cursor: pointer;
+    touch-action: manipulation;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    &:active { background: rgba(212, 165, 116, 0.14); }
+
+    &:disabled {
+      cursor: default;
+      border-color: rgba(160, 139, 114, 0.32);
+      color: @ink_dim;
+      font-style: normal;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.08em;
+      background: rgba(212, 165, 116, 0.02);
+    }
+
+    &:disabled .tsi-awake__btn-mark { opacity: 0.3; }
+  }
+
+  &__btn-mark {
+    font-size: 11px;
+    transform: translateY(-1px);
+    opacity: 0.7;
+  }
+
+  &__ledger {
+    margin: 20px auto 0;
+    background: transparent;
+    border: none;
+    color: @ink_dim;
+    font-family: @display;
+    font-style: italic;
+    font-size: 15px;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+  }
+
+  &__dev {
+    position: absolute;
+    bottom: 14px;
+    left: 0; right: 0;
+    text-align: center;
+    color: @ink_ghost;
+    font-size: 10.5px;
+    font-style: italic;
+    letter-spacing: 0.08em;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// NIGHT — candle, ghost, sunrise
+// ═══════════════════════════════════════════════════════════════════════
+.tsi-night {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background:
+    radial-gradient(ellipse at 50% 30%, #221710 0%, @bg_deep 60%),
+    @bg_deep;
+  box-shadow: inset 0 0 180px 50px rgba(0, 0, 0, 0.7);   // vignette toward center
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  &__candle-wrap {
+    position: absolute;
+    top: 96px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &__center {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    text-align: center;
+  }
+
+  &__brand {
+    font-family: @display;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 30px;
+    letter-spacing: 0.14em;
+    color: @ink;
+    opacity: 0.9;
+  }
+
+  &__ghost-stack {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 12px;
+  }
+
+  &__ghost {
+    font-family: @display;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 68px;
+    color: @ink_ghost;
+    letter-spacing: 0.03em;
+    text-shadow: 0 0 14px rgba(239, 226, 205, 0.05);
+    line-height: 1;
+
+    // Double-exposure echo — drifts off the real name like a second negative
+    &--echo {
+      position: absolute;
+      top: 0;
+      color: rgba(197, 138, 122, 0.52);
+      filter: blur(2.4px);
+      mix-blend-mode: screen;
+      animation: tsi-ghost-drift 5.4s ease-in-out infinite;
+    }
+  }
+
+  &__caption {
+    font-family: @display;
+    font-style: italic;
+    font-size: 18px;
+    color: @ink_dim;
+    letter-spacing: 0.05em;
+    margin-top: 8px;
+
+    &--sunrise { color: @sepia; font-size: 24px; letter-spacing: 0.10em; }
+  }
+
+  &__sunrise {
+    position: absolute;
+    left: -10%;
+    right: -10%;
+    bottom: -50%;
+    height: 90%;
+    background:
+      radial-gradient(closest-side at 50% 0%, rgba(232, 184, 120, 0.85), rgba(232, 184, 120, 0)),
+      radial-gradient(closest-side at 50% 30%, rgba(197, 138, 122, 0.55), rgba(197, 138, 122, 0));
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(40%);
+  }
+
+  // ── Phase transitions ────────────────────────────────────────────────
+  &--tucking_in {
+    .tsi-night__brand,
+    .tsi-night__caption { animation: tsi-fade-in 1.2s 0.2s both; }
+  }
+
+  &--asleep {
+    .tsi-night__brand { opacity: 0.55; }
+  }
+
+  &--waking {
+    .tsi-night__brand { opacity: 0.95; animation: tsi-fade-in 1.2s both; }
+    .tsi-night__sunrise { animation: tsi-sunrise 2.4s ease-out forwards; }
+  }
+}
+
+// ── Candle SVG ────────────────────────────────────────────────────────
+.tsi-candle {
+  display: block;
+
+  &__flame {
+    transform-origin: 20px 30px;
+    animation: tsi-flame-flicker 1.6s ease-in-out infinite alternate;
+  }
+
+  &__halo {
+    transform-origin: 20px 30px;
+    animation: tsi-halo-pulse 1.6s ease-in-out infinite alternate;
+  }
+
+  &--puffing {
+    .tsi-candle__flame {
+      animation:
+        tsi-flame-flicker 0.18s ease-in-out 3,
+        tsi-flame-out 1s 0.6s forwards;
+    }
+    .tsi-candle__halo { animation: tsi-halo-out 1.6s forwards; }
+    .tsi-candle__smoke { animation: tsi-smoke-rise 1.4s 0.7s forwards; }
+  }
+
+  &--out {
+    .tsi-candle__flame { opacity: 0; }
+    .tsi-candle__halo { opacity: 0; }
+  }
+}
+
+@keyframes tsi-flame-flicker {
+  0%   { transform: scaleY(1)    skewX(-1deg); opacity: 0.96; }
+  50%  { transform: scaleY(1.08) skewX(2deg);  opacity: 1; }
+  100% { transform: scaleY(0.96) skewX(-1deg); opacity: 0.92; }
+}
+@keyframes tsi-halo-pulse {
+  0%   { opacity: 0.85; }
+  100% { opacity: 1; }
+}
+@keyframes tsi-flame-out {
+  0%   { transform: translateY(0)    scale(1);   opacity: 1; }
+  60%  { transform: translateY(-4px) scale(0.6); opacity: 0.6; }
+  100% { transform: translateY(-12px) scale(0);  opacity: 0; }
+}
+@keyframes tsi-halo-out {
+  to { opacity: 0; transform: scale(0.4); }
+}
+@keyframes tsi-smoke-rise {
+  0%   { opacity: 0;   transform: translateY(0); }
+  20%  { opacity: 0.7; }
+  100% { opacity: 0;   transform: translateY(-18px); }
+}
+@keyframes tsi-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes tsi-ghost-drift {
+  0%, 100% { transform: translate(0, 0);      opacity: 0.30; letter-spacing: 0.03em; }
+  50%      { transform: translate(6px, -5px); opacity: 0.66; letter-spacing: 0.055em; }
+}
+@keyframes tsi-sunrise {
+  0%   { opacity: 0; transform: translateY(80%); }
+  40%  { opacity: 0.85; }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// REVIEW — paper letters with stamps
+// ═══════════════════════════════════════════════════════════════════════
+.tsi-review {
+  &__date {
+    .tsi-burn();
+  }
+
+  &__title {
+    font-family: @display;
+    margin-top: 8px;
+    font-size: 39px;
+    font-style: italic;
+    font-weight: 500;
+    line-height: 1.14;
+  }
+
+  &__subtitle {
+    font-family: @display;
+    margin-top: 10px;
+    color: @ink_dim;
+    font-style: italic;
+    font-size: 18px;
+    line-height: 1.45;
+  }
+
+  &__list {
+    margin-top: 26px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 8px;
+  }
+
+  &__finish {
+    margin-top: 16px;
+    padding: 13px 28px;
+    background: transparent;
+    border: 1px solid @ember;
+    color: @ember_hot;
+    font-family: @display;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 18px;
+    letter-spacing: 0.05em;
+    border-radius: 2px;
+    align-self: center;
+    cursor: pointer;
+    touch-action: manipulation;
+
+    &:disabled { opacity: 0.25; cursor: default; }
+  }
+}
+
+.tsi-action {
+  position: relative;
+
+  &__paper {
+    background:
+      radial-gradient(ellipse at 28% 0%, rgba(255, 248, 230, 0.5), transparent 58%),
+      linear-gradient(170deg, @bg_paper, @bg_paper_2);
+    color: @paper_ink;
+    border-radius: 1px;
+    padding: 20px 18px 40px;
+    position: relative;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.18) inset,
+      0 10px 26px rgba(0, 0, 0, 0.45);
+    // Torn-bottom illusion
+    clip-path: polygon(
+      0 0, 100% 0, 100% 96%,
+      94% 100%, 88% 96%, 80% 100%, 72% 97%, 64% 100%, 56% 98%, 48% 100%,
+      40% 96%, 32% 100%, 24% 97%, 16% 100%, 8% 96%, 0 100%
+    );
+  }
+
+  &__label {
+    font-family: @body;
+    font-size: 10px;
+    color: rgba(58, 44, 30, 0.55);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  &__body {
+    position: relative;
+    font-family: @display;
+    font-style: italic;
+    line-height: 1.4;
+    font-size: 23px;
+    color: @paper_ink;
+    margin-bottom: 18px;
+    min-height: 26px;
+    padding-left: 26px;
+  }
+
+  // Oversized hanging opening quote, like a magazine pull-quote
+  &__quote::before {
+    content: '\201C';
+    position: absolute;
+    left: -6px;
+    top: -12px;
+    font-family: @display;
+    font-style: italic;
+    font-size: 58px;
+    line-height: 1;
+    color: rgba(58, 44, 30, 0.28);
+  }
+  &__quote::after { content: '\201D'; color: rgba(58, 44, 30, 0.5); }
+
+  &__ghost {
+    color: @blood;
+    font-size: 18px;
+    letter-spacing: 0.03em;
+  }
+
+  &__stamp {
+    position: absolute;
+    right: 14px;
+    bottom: 22px;
+    transform: rotate(-12deg);
+    pointer-events: none;
+    mix-blend-mode: multiply;       // ink bleeds into the paper
+    animation: tsi-stamp-press 0.4s ease-out;
+  }
+
+  &__btns {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 12px;
+  }
+
+  &__btn {
+    padding: 9px 22px;
+    background: transparent;
+    border: 1px solid @ink_ghost;
+    color: @ink_dim;
+    font-family: @display;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 17px;
+    letter-spacing: 0.05em;
+    border-radius: 2px;
+    cursor: pointer;
+    touch-action: manipulation;
+
+    &--disavow { border-color: @blood; color: @rose; }
+    &--approve { border-color: @ember; color: @ember_hot; }
+
+    &:active { transform: translateY(1px); }
+  }
+
+  &--approved {
+    .tsi-action__paper {
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.18) inset,
+        0 10px 26px rgba(199, 149, 103, 0.22);
+    }
+  }
+
+  &--disavowed {
+    .tsi-action__paper {
+      background:
+        radial-gradient(ellipse at 28% 0%, rgba(154, 74, 68, 0.20), transparent 58%),
+        linear-gradient(170deg, #e3d0ad, #c8b287);
+    }
+  }
+}
+
+@keyframes tsi-stamp-press {
+  0%   { transform: rotate(-12deg) scale(2.2); opacity: 0; }
+  50%  { transform: rotate(-15deg) scale(1.1); opacity: 1; }
+  100% { transform: rotate(-12deg) scale(1);   opacity: 1; }
+}
+
+// Renter signature line on each paper card (a button → opens profile)
+.tsi-rentermark {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: absolute;
+  left: 18px;
+  bottom: 22px;
+  max-width: 62%;
+  min-width: 0;
+  margin: 0;
+  padding: 2px 4px 2px 0;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+
+  &:disabled { cursor: default; }
+  &:not(:disabled):active { opacity: 0.6; }
+
+  &__circle {
+    flex: 0 0 auto;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1px solid rgba(58, 44, 30, 0.4);
+    background: rgba(58, 44, 30, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: @display;
+    font-style: italic;
+    font-size: 13px;
+    color: @paper_ink;
+  }
+
+  &__avatar {
+    flex: 0 0 auto;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgba(58, 44, 30, 0.4);
+    pointer-events: none;
+  }
+
+  &__name {
+    font-family: @display;
+    font-style: italic;
+    font-size: 17px;
+    color: rgba(58, 44, 30, 0.7);
+    letter-spacing: 0.02em;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+// SVG stamp tweaks
+.tsi-stamp { display: block; }
+
+// ═══════════════════════════════════════════════════════════════════════
+// LEDGER
+// ═══════════════════════════════════════════════════════════════════════
+.tsi-ledger {
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 26px;
+  }
+
+  &__back {
+    background: transparent;
+    border: none;
+    color: @ink_dim;
+    font-family: @display;
+    font-style: italic;
+    font-size: 17px;
+    cursor: pointer;
+    padding: 4px 0;
+    letter-spacing: 0.03em;
+  }
+
+  &__title {
+    font-family: @display;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 28px;
+    flex: 1;
+    letter-spacing: 0.03em;
+  }
+
+  &__empty {
+    margin-top: 60px;
+    text-align: center;
+    color: @ink_dim;
+    font-family: @display;
+    font-style: italic;
+    font-size: 18px;
+  }
+
+  &__list {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding-bottom: 24px;
+  }
+
+  &__row {
+    border-left: 1px solid @rule;
+    padding-left: 14px;
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: -4px;
+      top: 5px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: @ember;
+      box-shadow: 0 0 10px rgba(232, 184, 120, 0.6);
+    }
+  }
+
+  &__row-head {
+    margin-bottom: 8px;
+    font-family: @body;
+    font-size: 10px;
+    color: @ink_dim;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+
+  &__renter {
+    font-family: @display;
+    font-style: italic;
+    font-size: 16px;
+    text-transform: none;
+    letter-spacing: 0.01em;
+    margin-left: 6px;
+    color: @ink_dim;
+
+    &--tappable {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      touch-action: manipulation;
+      color: @ember;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-color: rgba(199, 149, 103, 0.45);
+
+      &:active { opacity: 0.6; }
+    }
+  }
+
+  &__row-body { display: flex; flex-direction: column; gap: 8px; }
+
+  &__act {
+    display: flex;
+    gap: 10px;
+    font-family: @display;
+    font-style: italic;
+    font-size: 18px;
+    line-height: 1.4;
+    color: @ink;
+
+    &--disavowed { color: @rose; }
+    &--pending { color: @ink_dim; }
+  }
+
+  &__kind {
+    flex: 0 0 16px;
+    color: @ember;
+    font-style: normal;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// AWAKE · sleeping-friends strip (the Ghost Wall, producer side)
+// ═══════════════════════════════════════════════════════════════════════
+.tsi-awake {
+  &__wall {
+    margin: 26px auto 0;
+    width: 100%;
+    max-width: 300px;
+    border-top: 1px solid @rule;
+    padding-top: 16px;
+  }
+
+  &__wall-title {
+    text-align: center;
+    color: @sepia;
+    font-family: @body;
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 12px;
+  }
+
+  &__sleeper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 2px;
+    cursor: pointer;
+    touch-action: manipulation;
+
+    & + & { border-top: 1px solid rgba(212, 165, 116, 0.12); }
+    &:active { opacity: 0.6; }
+  }
+
+  &__sleeper-who {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    min-width: 0;
+    flex: 1;
+    background: none;
+    border: none;
+    padding: 0;
+    text-align: left;
+    cursor: pointer;
+
+    &:disabled { cursor: default; }
+  }
+
+  &__sleeper-avatar {
+    flex: 0 0 auto;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid @rule;
+    filter: grayscale(0.35) brightness(0.92);
+    pointer-events: none;
+  }
+
+  &__sleeper-circle {
+    flex: 0 0 auto;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid @rule;
+    background: rgba(212, 165, 116, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: @display;
+    font-style: italic;
+    font-size: 14px;
+    color: @ember;
+  }
+
+  &__sleeper-name {
+    font-family: @display;
+    font-style: italic;
+    font-size: 18px;
+    color: @ink;
+    letter-spacing: 0.02em;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__sleeper-cta {
+    flex: 0 0 auto;
+    font-family: @display;
+    font-style: italic;
+    font-size: 14px;
+    color: @ember;
+    letter-spacing: 0.02em;
+    opacity: 0.9;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// STAND-IN · compose as a sleeping friend
+// ═══════════════════════════════════════════════════════════════════════
+.tsi-standin {
+  &__header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 18px;
+  }
+
+  &__back {
+    background: transparent;
+    border: none;
+    color: @ink_dim;
+    font-family: @display;
+    font-style: italic;
+    font-size: 17px;
+    cursor: pointer;
+    padding: 4px 0;
+    letter-spacing: 0.03em;
+  }
+
+  &__title {
+    font-family: @display;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 32px;
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+    margin-bottom: 18px;
+  }
+
+  &__who {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    align-self: flex-start;
+    max-width: 100%;
+    background: none;
+    border: none;
+    padding: 0;
+    margin-bottom: 26px;
+    cursor: pointer;
+
+    &:disabled { cursor: default; }
+    &:not(:disabled):active { opacity: 0.6; }
+  }
+
+  &__avatar {
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid @rule;
+    pointer-events: none;
+  }
+
+  &__circle {
+    flex: 0 0 auto;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    border: 1px solid @rule;
+    background: rgba(212, 165, 116, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: @display;
+    font-style: italic;
+    font-size: 15px;
+    color: @ember;
+  }
+
+  &__who-name {
+    font-family: @display;
+    font-style: italic;
+    font-size: 19px;
+    color: @ink;
+    letter-spacing: 0.02em;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__modes {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  &__mode {
+    flex: 1;
+    padding: 10px 8px;
+    background: transparent;
+    border: 1px solid @rule;
+    border-radius: 2px;
+    color: @ink_dim;
+    font-family: @display;
+    font-style: italic;
+    font-size: 15px;
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    touch-action: manipulation;
+
+    &--on {
+      border-color: @ember;
+      color: @ember_hot;
+      background: rgba(212, 165, 116, 0.06);
+    }
+  }
+
+  // Cream paper — you're forging on their page.
+  &__input {
+    flex: 1;
+    min-height: 150px;
+    resize: none;
+    padding: 16px 16px;
+    background:
+      linear-gradient(180deg, @bg_paper 0%, @bg_paper_2 100%);
+    border: none;
+    border-radius: 3px;
+    color: @paper_ink;
+    font-family: @body;
+    font-size: 15px;
+    line-height: 1.6;
+    letter-spacing: 0.01em;
+    box-shadow: inset 0 1px 6px rgba(58, 44, 30, 0.18);
+    outline: none;
+
+    &::placeholder {
+      color: rgba(58, 44, 30, 0.45);
+      font-style: italic;
+    }
+  }
+
+  &__publish {
+    margin: 18px auto 0;
+    padding: 13px 30px;
+    background: rgba(212, 165, 116, 0.05);
+    border: 1px solid @ember;
+    color: @ember_hot;
+    font-family: @display;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 18px;
+    letter-spacing: 0.04em;
+    border-radius: 2px;
+    cursor: pointer;
+    touch-action: manipulation;
+
+    &:active { background: rgba(212, 165, 116, 0.14); }
+
+    &:disabled {
+      cursor: default;
+      border-color: rgba(160, 139, 114, 0.3);
+      color: @ink_dim;
+      background: transparent;
+    }
+  }
+
+  &__done {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: @display;
+    font-style: italic;
+    font-size: 24px;
+    color: @ember_hot;
+    letter-spacing: 0.03em;
+    text-shadow: 0 0 14px rgba(232, 184, 120, 0.4);
+  }
+}
