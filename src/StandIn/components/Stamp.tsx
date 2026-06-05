@@ -6,7 +6,7 @@ interface Props {
 // A tilted seal stamp with concentric rings + bisecting text band.
 // Slightly imperfect path + opacity so it reads as hand-stamped.
 export default function Stamp({ kind, label }: Props) {
-  const color = kind === 'approved' ? '#C9A86A' : '#B85C4E';
+  const color = kind === 'approved' ? '#F5B1C7' : '#E5675C';
   return (
     <svg
       className={`tsi-stamp tsi-stamp--${kind}`}
@@ -41,7 +41,7 @@ export default function Stamp({ kind, label }: Props) {
         x="55"
         y="60"
         textAnchor="middle"
-        fontFamily="'Inter', system-ui, sans-serif"
+        fontFamily="'Montserrat', system-ui, sans-serif"
         fontWeight="600"
         fontSize="13"
         letterSpacing="2.4"

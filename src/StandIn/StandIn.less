@@ -1,27 +1,34 @@
-// ── Palette · Editorial Noir ─────────────────────────────────────────────
-// Cool ink-blue night, bone text, one warm gold accent + one cold steel
-// signal. No sepia monotone, no skeuomorphic paper.
-@bg:        #0B0D12;        // ink — near-black blue
-@bg_deep:   #07080C;
-@panel:     #14171F;        // raised card / field surface
-@panel_2:   #191D27;
-@ink:       #E8E6E0;        // bone — primary text
-@ink_dim:   #9DA0A6;        // cool grey — secondary
-@ink_faint: #6B6F78;        // tertiary / kicker labels
-@ink_ghost: #44484F;        // sleeping-name etc.
-@gold:      #C9A86A;        // warm accent
-@gold_hot:  #DCC084;
+// ── Palette · AlterU After Dark ──────────────────────────────────────────
+// AlterU brand surfaces: pure black + #1A1A1A panels. Pink #F5B1C7 is the
+// brand/UI accent (kickers, CTAs, active states, links). Dark text rides on
+// pink fills (never white). One warm exception: diegetic light — the candle
+// flame + sunrise glow — stays amber, because brand chrome ≠ a light source.
+@bg:        #0A0A0C;        // app surface (near-pure black)
+@bg_deep:   #000000;        // surface/primary
+@panel:     #1A1A1A;        // surface/secondary — cards / fields
+@panel_2:   #202024;        // raised panel
+@ink:       #FFFFFF;        // text/primary
+@ink_dim:   #B7B7BC;        // secondary
+@ink_faint: #76767E;        // tertiary / kicker labels
+@ink_ghost: #44444C;        // sleeping-name etc.
+@pink:      #F5B1C7;        // brand/pink — the AlterU accent
+@pink_hot:  #F8C7D7;        // brighter pink (hover / glow)
+@on_pink:   #1F1F1F;        // text/on-brand — dark text on pink fills
+@glow:      #DCC084;        // diegetic warm light ONLY (candle + sunrise)
+@glow_dim:  #C9A86A;
 @cold:      #6E8BA8;        // cold steel signal (the double / echo)
-@brick:     #B85C4E;        // disavow — muted alarm
-@brick_dim: #CB8074;
-@rule:      rgba(233, 230, 224, 0.12);
-@rule_soft: rgba(233, 230, 224, 0.06);
+@brick:     #E5675C;        // disavow — alarm (AlterU error register)
+@brick_dim: #F0938A;
+@rule:      rgba(255, 255, 255, 0.12);
+@rule_soft: rgba(255, 255, 255, 0.06);
 
-// Type system — TWO jobs only.
+// Type system — THREE jobs (AlterU split: Montserrat brand, Inter body, serif voice).
 //   @display  serif. UPRIGHT for titles; ITALIC reserved for borrowed words.
-//   @ui       grotesque. all body, labels, buttons, meta, names, nav.
+//   @brand    Montserrat. kickers, buttons, mode labels, brand marks.
+//   @ui       Inter. body, meta, names, nav.
 // CJK glyphs fall through to the Noto faces (Latin faces have no CJK).
 @display: 'Cormorant Garamond', 'Noto Serif SC', 'Iowan Old Style', Georgia, serif;
+@brand:   'Montserrat', 'Noto Sans SC', system-ui, -apple-system, sans-serif;
 @ui:      'Inter', 'Noto Sans SC', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
 .tsi {
@@ -84,13 +91,13 @@
 
 // Editorial kicker — tracked caps, used for dates / section labels.
 .tsi-burn {
-  font-family: @ui;
-  color: @gold;
+  font-family: @brand;
+  color: @pink;
   font-size: 10.5px;
   font-weight: 600;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  opacity: 0.78;
+  opacity: 0.82;
   font-variant-numeric: tabular-nums;
 }
 
@@ -159,9 +166,9 @@
     height: 88px;
     border-radius: 50%;
     background:
-      radial-gradient(circle at 30% 28%, rgba(201, 168, 106, 0.20), transparent 60%),
-      linear-gradient(160deg, #1d222c, #0e1116);
-    border: 1px solid rgba(201, 168, 106, 0.38);
+      radial-gradient(circle at 30% 28%, rgba(245, 177, 199, 0.22), transparent 60%),
+      linear-gradient(160deg, #1f1f22, #0c0c0e);
+    border: 1px solid rgba(245, 177, 199, 0.42);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -170,7 +177,7 @@
       font-family: @display;
       font-size: 42px;
       font-weight: 500;
-      color: @gold_hot;
+      color: @pink_hot;
       letter-spacing: 0.01em;
       transform: translateY(-2px);
     }
@@ -211,31 +218,33 @@
 
   &__btn {
     margin: 30px auto 0;
-    padding: 13px 32px;
-    background: rgba(201, 168, 106, 0.04);
-    border: 1px solid @gold;
-    color: @gold_hot;
-    font-family: @ui;
-    font-weight: 600;
+    padding: 13px 34px;
+    background: @pink;
+    border: 1px solid @pink;
+    color: @on_pink;
+    font-family: @brand;
+    font-weight: 700;
     font-size: 15px;
-    letter-spacing: 0.06em;
-    border-radius: 3px;
+    letter-spacing: 0.04em;
+    border-radius: 8px;
     cursor: pointer;
     touch-action: manipulation;
     display: inline-flex;
     align-items: center;
     gap: 9px;
-    transition: background 0.18s ease, border-color 0.18s ease;
+    box-shadow: 0 6px 22px rgba(245, 177, 199, 0.18);
+    transition: background 0.18s ease, box-shadow 0.18s ease, transform 0.12s ease;
 
-    &:active { background: rgba(201, 168, 106, 0.12); }
+    &:active { background: @pink_hot; transform: translateY(1px); }
 
     &:disabled {
       cursor: default;
-      border-color: rgba(107, 111, 120, 0.4);
+      background: transparent;
+      border-color: rgba(118, 118, 126, 0.4);
       color: @ink_faint;
+      box-shadow: none;
       font-variant-numeric: tabular-nums;
       letter-spacing: 0.08em;
-      background: transparent;
     }
 
     &:disabled .tsi-awake__btn-mark { opacity: 0.3; }
@@ -244,8 +253,8 @@
   &__btn-mark {
     font-size: 10px;
     transform: translateY(-1px);
-    color: @gold;
-    opacity: 0.8;
+    color: @on_pink;
+    opacity: 0.75;
   }
 
   &__ledger {
@@ -353,7 +362,7 @@
     letter-spacing: 0.02em;
     margin-top: 8px;
 
-    &--sunrise { color: @gold_hot; font-style: normal; font-weight: 500; font-size: 24px; letter-spacing: 0.08em; }
+    &--sunrise { color: @glow; font-style: normal; font-weight: 500; font-size: 24px; letter-spacing: 0.08em; }
   }
 
   &__sunrise {
@@ -491,21 +500,22 @@
 
   &__finish {
     margin-top: 16px;
-    padding: 12px 28px;
-    background: rgba(201, 168, 106, 0.04);
-    border: 1px solid @gold;
-    color: @gold_hot;
-    font-family: @ui;
-    font-weight: 600;
+    padding: 12px 30px;
+    background: @pink;
+    border: 1px solid @pink;
+    color: @on_pink;
+    font-family: @brand;
+    font-weight: 700;
     font-size: 15px;
-    letter-spacing: 0.05em;
-    border-radius: 3px;
+    letter-spacing: 0.04em;
+    border-radius: 8px;
     align-self: center;
     cursor: pointer;
     touch-action: manipulation;
+    box-shadow: 0 6px 22px rgba(245, 177, 199, 0.18);
 
-    &:active { background: rgba(201, 168, 106, 0.12); }
-    &:disabled { opacity: 0.28; cursor: default; background: transparent; }
+    &:active { background: @pink_hot; }
+    &:disabled { opacity: 0.28; cursor: default; background: transparent; color: @ink_faint; border-color: rgba(118, 118, 126, 0.4); box-shadow: none; }
   }
 }
 
@@ -525,7 +535,7 @@
   }
 
   &__label {
-    font-family: @ui;
+    font-family: @brand;
     font-size: 9.5px;
     font-weight: 600;
     color: @ink_faint;
@@ -557,9 +567,9 @@
     font-style: italic;
     font-size: 56px;
     line-height: 1;
-    color: rgba(201, 168, 106, 0.4);
+    color: rgba(245, 177, 199, 0.42);
   }
-  &__quote::after { content: '\201D'; color: rgba(201, 168, 106, 0.55); }
+  &__quote::after { content: '\201D'; color: rgba(245, 177, 199, 0.58); }
 
   &__ghost {
     font-family: @ui;
@@ -591,34 +601,34 @@
     background: transparent;
     border: 1px solid @ink_ghost;
     color: @ink_dim;
-    font-family: @ui;
+    font-family: @brand;
     font-weight: 600;
     font-size: 14px;
     letter-spacing: 0.04em;
-    border-radius: 3px;
+    border-radius: 7px;
     cursor: pointer;
     touch-action: manipulation;
 
-    &--disavow { border-color: rgba(184, 92, 78, 0.6); color: @brick_dim; }
-    &--approve { border-color: @gold; color: @gold_hot; }
+    &--disavow { border-color: rgba(229, 103, 92, 0.6); color: @brick_dim; }
+    &--approve { border-color: @pink; color: @pink_hot; background: rgba(245, 177, 199, 0.07); }
 
     &:active { transform: translateY(1px); }
   }
 
   &--approved {
     .tsi-action__paper {
-      border-color: rgba(201, 168, 106, 0.4);
+      border-color: rgba(245, 177, 199, 0.42);
       box-shadow:
         0 1px 0 rgba(255, 255, 255, 0.04) inset,
-        0 0 0 1px rgba(201, 168, 106, 0.12),
+        0 0 0 1px rgba(245, 177, 199, 0.14),
         0 10px 26px rgba(0, 0, 0, 0.4);
     }
   }
 
   &--disavowed {
     .tsi-action__paper {
-      border-color: rgba(184, 92, 78, 0.4);
-      background: linear-gradient(168deg, #1d1719, #16131410);
+      border-color: rgba(229, 103, 92, 0.4);
+      background: linear-gradient(168deg, #1e1718, #16131410);
       opacity: 0.92;
     }
   }
@@ -756,14 +766,14 @@
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: @gold;
-      box-shadow: 0 0 10px rgba(201, 168, 106, 0.55);
+      background: @pink;
+      box-shadow: 0 0 10px rgba(245, 177, 199, 0.55);
     }
   }
 
   &__row-head {
     margin-bottom: 8px;
-    font-family: @ui;
+    font-family: @brand;
     font-size: 9.5px;
     font-weight: 600;
     color: @ink_faint;
@@ -786,10 +796,10 @@
       padding: 0;
       cursor: pointer;
       touch-action: manipulation;
-      color: @gold;
+      color: @pink;
       text-decoration: underline;
       text-underline-offset: 3px;
-      text-decoration-color: rgba(201, 168, 106, 0.45);
+      text-decoration-color: rgba(245, 177, 199, 0.45);
 
       &:active { opacity: 0.6; }
     }
@@ -813,7 +823,7 @@
 
   &__kind {
     flex: 0 0 16px;
-    color: @gold;
+    color: @pink;
     font-style: normal;
     font-family: @ui;
     font-size: 13px;
@@ -834,13 +844,13 @@
 
   &__wall-title {
     text-align: center;
-    color: @gold;
-    font-family: @ui;
+    color: @pink;
+    font-family: @brand;
     font-size: 9.5px;
     font-weight: 600;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    opacity: 0.78;
+    opacity: 0.82;
     margin-bottom: 12px;
   }
 
@@ -913,10 +923,10 @@
 
   &__sleeper-cta {
     flex: 0 0 auto;
-    font-family: @ui;
+    font-family: @brand;
     font-weight: 600;
     font-size: 12px;
-    color: @gold;
+    color: @pink;
     letter-spacing: 0.03em;
     opacity: 0.92;
   }
@@ -1019,19 +1029,19 @@
     padding: 10px 8px;
     background: transparent;
     border: 1px solid @rule;
-    border-radius: 3px;
+    border-radius: 6px;
     color: @ink_dim;
-    font-family: @ui;
-    font-weight: 500;
+    font-family: @brand;
+    font-weight: 600;
     font-size: 13px;
     letter-spacing: 0.02em;
     cursor: pointer;
     touch-action: manipulation;
 
     &--on {
-      border-color: @gold;
-      color: @gold_hot;
-      background: rgba(201, 168, 106, 0.06);
+      border-color: @pink;
+      color: @pink_hot;
+      background: rgba(245, 177, 199, 0.08);
     }
   }
 
@@ -1054,7 +1064,7 @@
     outline: none;
     transition: border-color 0.18s ease;
 
-    &:focus { border-color: rgba(201, 168, 106, 0.5); }
+    &:focus { border-color: rgba(245, 177, 199, 0.55); }
 
     &::placeholder {
       color: @ink_faint;
@@ -1064,25 +1074,27 @@
 
   &__publish {
     margin: 18px auto 0;
-    padding: 12px 30px;
-    background: rgba(201, 168, 106, 0.04);
-    border: 1px solid @gold;
-    color: @gold_hot;
-    font-family: @ui;
-    font-weight: 600;
+    padding: 12px 32px;
+    background: @pink;
+    border: 1px solid @pink;
+    color: @on_pink;
+    font-family: @brand;
+    font-weight: 700;
     font-size: 15px;
-    letter-spacing: 0.05em;
-    border-radius: 3px;
+    letter-spacing: 0.04em;
+    border-radius: 8px;
     cursor: pointer;
     touch-action: manipulation;
+    box-shadow: 0 6px 22px rgba(245, 177, 199, 0.18);
 
-    &:active { background: rgba(201, 168, 106, 0.12); }
+    &:active { background: @pink_hot; }
 
     &:disabled {
       cursor: default;
-      border-color: rgba(107, 111, 120, 0.4);
+      border-color: rgba(118, 118, 126, 0.4);
       color: @ink_faint;
       background: transparent;
+      box-shadow: none;
     }
   }
 
@@ -1095,8 +1107,8 @@
     font-family: @display;
     font-style: italic;
     font-size: 25px;
-    color: @gold_hot;
+    color: @pink_hot;
     letter-spacing: 0.02em;
-    text-shadow: 0 0 14px rgba(220, 192, 132, 0.3);
+    text-shadow: 0 0 14px rgba(245, 177, 199, 0.3);
   }
 }
