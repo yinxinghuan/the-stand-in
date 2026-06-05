@@ -1,24 +1,28 @@
-// ── Palette · 3AM Film ───────────────────────────────────────────────────
-@bg:         #120d0a;        // warm black
-@bg_deep:    #0d0907;
-@bg_paper:   #f5e6c8;        // cream — action cards / paper
-@bg_paper_2: #e6d2a8;
-@ink:        #efe2cd;        // warm cream text on dark
-@ink_dim:    #a08b72;
-@ink_ghost:  #5a4a3c;
-@sepia:      #d4a574;        // film sepia
-@ember:      #c79567;
-@ember_hot:  #e8b878;
-@rose:       #c58a7a;        // faded rose
-@blood:      #9a4a44;
-@paper_ink:  #3a2c1e;
-@rule:       rgba(212, 165, 116, 0.32);
+// ── Palette · Editorial Noir ─────────────────────────────────────────────
+// Cool ink-blue night, bone text, one warm gold accent + one cold steel
+// signal. No sepia monotone, no skeuomorphic paper.
+@bg:        #0B0D12;        // ink — near-black blue
+@bg_deep:   #07080C;
+@panel:     #14171F;        // raised card / field surface
+@panel_2:   #191D27;
+@ink:       #E8E6E0;        // bone — primary text
+@ink_dim:   #9DA0A6;        // cool grey — secondary
+@ink_faint: #6B6F78;        // tertiary / kicker labels
+@ink_ghost: #44484F;        // sleeping-name etc.
+@gold:      #C9A86A;        // warm accent
+@gold_hot:  #DCC084;
+@cold:      #6E8BA8;        // cold steel signal (the double / echo)
+@brick:     #B85C4E;        // disavow — muted alarm
+@brick_dim: #CB8074;
+@rule:      rgba(233, 230, 224, 0.12);
+@rule_soft: rgba(233, 230, 224, 0.06);
 
-// Display = large light italic; Body = readable serif.
-// 'Noto Serif SC' sits after the Latin face so CJK glyphs fall through to it
-// (Cormorant/Libre have no CJK glyphs → per-glyph fallback unifies the look).
-@display: 'Cormorant Garamond', 'Noto Serif SC', 'Iowan Old Style', Palatino, Georgia, serif;
-@body:    'Libre Baskerville', 'Noto Serif SC', 'Iowan Old Style', Georgia, serif;
+// Type system — TWO jobs only.
+//   @display  serif. UPRIGHT for titles; ITALIC reserved for borrowed words.
+//   @ui       grotesque. all body, labels, buttons, meta, names, nav.
+// CJK glyphs fall through to the Noto faces (Latin faces have no CJK).
+@display: 'Cormorant Garamond', 'Noto Serif SC', 'Iowan Old Style', Georgia, serif;
+@ui:      'Inter', 'Noto Sans SC', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
 .tsi {
   position: relative;
@@ -27,9 +31,9 @@
   color: @ink;
   -webkit-tap-highlight-color: transparent;
   user-select: none;
-  font-family: @body;
+  font-family: @ui;
 
-  // ── Light leak — warm wash bleeding from the top-left edge ──
+  // ── Single warm reading-lamp pool, top-right. Cool base, warm light. ──
   &::before {
     content: '';
     position: absolute;
@@ -37,24 +41,23 @@
     z-index: 60;
     pointer-events: none;
     background:
-      radial-gradient(130% 64% at 6% -10%, rgba(236, 188, 120, 0.26), transparent 48%),
-      radial-gradient(96% 54% at 102% 2%, rgba(197, 138, 122, 0.18), transparent 52%),
-      radial-gradient(70% 40% at 96% 102%, rgba(154, 74, 68, 0.10), transparent 55%);
+      radial-gradient(58% 38% at 96% -6%, rgba(201, 168, 106, 0.16), transparent 60%),
+      radial-gradient(120% 80% at 50% 120%, rgba(0, 0, 0, 0.42), transparent 60%);
     mix-blend-mode: screen;
-    animation: tsi-leak-breathe 11s ease-in-out infinite;
+    animation: tsi-lamp-breathe 12s ease-in-out infinite;
   }
 
-  // ── Film grain — animated noise over everything ──
+  // ── Faint film grain — texture, not a filter ──
   &::after {
     content: '';
     position: absolute;
     inset: -50%;
     z-index: 61;
     pointer-events: none;
-    opacity: 0.085;
+    opacity: 0.05;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     background-size: 160px 160px;
-    animation: tsi-grain 0.7s steps(4) infinite;
+    animation: tsi-grain 0.8s steps(4) infinite;
   }
 }
 
@@ -65,8 +68,8 @@
   75%  { transform: translate(-2%, -2%); }
   100% { transform: translate(3%, 2%); }
 }
-@keyframes tsi-leak-breathe {
-  0%, 100% { opacity: 0.7; }
+@keyframes tsi-lamp-breathe {
+  0%, 100% { opacity: 0.78; }
   50%      { opacity: 1; }
 }
 
@@ -79,15 +82,16 @@
   z-index: 2;
 }
 
-// Camera-style date burn-in, used on multiple screens
+// Editorial kicker — tracked caps, used for dates / section labels.
 .tsi-burn {
-  font-family: @body;
-  color: @sepia;
-  font-size: 11px;
-  letter-spacing: 0.16em;
+  font-family: @ui;
+  color: @gold;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  opacity: 0.72;
-  text-shadow: 0 0 8px rgba(212, 165, 116, 0.4);
+  opacity: 0.78;
+  font-variant-numeric: tabular-nums;
 }
 
 // ═══════════════════════════════════════════════════════════════════════
@@ -99,11 +103,11 @@
 
   &__lamp-glow {
     position: absolute;
-    top: -140px;
-    right: -120px;
-    width: 380px;
-    height: 380px;
-    background: radial-gradient(closest-side, rgba(232, 184, 120, 0.20), rgba(232, 184, 120, 0));
+    top: -150px;
+    right: -130px;
+    width: 360px;
+    height: 360px;
+    background: radial-gradient(closest-side, rgba(201, 168, 106, 0.16), rgba(201, 168, 106, 0));
     pointer-events: none;
   }
 
@@ -113,26 +117,27 @@
     left: -24px;
     width: 130px;
     height: 190px;
-    border-right: 1px solid rgba(239, 226, 205, 0.05);
-    border-bottom: 1px solid rgba(239, 226, 205, 0.05);
+    border-right: 1px solid rgba(110, 139, 168, 0.08);
+    border-bottom: 1px solid rgba(110, 139, 168, 0.08);
     overflow: hidden;
-    opacity: 0.55;
+    opacity: 0.6;
   }
 
   &__window-pane {
     width: 100%;
     height: 100%;
-    background: linear-gradient(180deg, rgba(90, 80, 70, 0.16), rgba(20, 16, 12, 0));
-    box-shadow: inset 0 0 24px rgba(239, 226, 205, 0.02);
+    background: linear-gradient(180deg, rgba(110, 139, 168, 0.14), rgba(11, 13, 18, 0));
+    box-shadow: inset 0 0 24px rgba(110, 139, 168, 0.03);
   }
 
   &__clock {
     position: relative;
-    color: @sepia;
-    font-size: 11px;
-    letter-spacing: 0.18em;
-    opacity: 0.72;
-    text-shadow: 0 0 8px rgba(212, 165, 116, 0.4);
+    color: @ink_faint;
+    font-family: @ui;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    font-variant-numeric: tabular-nums;
     margin-top: 4px;
     margin-bottom: 40px;
   }
@@ -154,30 +159,29 @@
     height: 88px;
     border-radius: 50%;
     background:
-      radial-gradient(circle at 30% 28%, rgba(232, 184, 120, 0.26), transparent 60%),
-      linear-gradient(160deg, #2e2620, #18120d);
-    border: 1px solid rgba(212, 165, 116, 0.42);
+      radial-gradient(circle at 30% 28%, rgba(201, 168, 106, 0.20), transparent 60%),
+      linear-gradient(160deg, #1d222c, #0e1116);
+    border: 1px solid rgba(201, 168, 106, 0.38);
     display: flex;
     align-items: center;
     justify-content: center;
 
     span {
       font-family: @display;
-      font-size: 40px;
-      font-style: italic;
+      font-size: 42px;
       font-weight: 500;
-      color: @ember_hot;
-      letter-spacing: 0.02em;
-      transform: translateY(-3px);
+      color: @gold_hot;
+      letter-spacing: 0.01em;
+      transform: translateY(-2px);
     }
   }
 
   &__name {
     font-family: @display;
-    font-size: 30px;
-    font-weight: 500;
-    letter-spacing: 0.02em;
-    font-style: italic;
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: 0.005em;
+    color: @ink;
   }
 
   &__rule {
@@ -187,61 +191,61 @@
   }
 
   &__bio {
-    font-family: @display;
-    font-size: 16px;
+    font-family: @ui;
+    font-size: 13px;
     color: @ink_dim;
-    font-style: italic;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
   }
 
+  // The one poetic line — serif italic, the game's voice.
   &__hint {
-    margin: 40px 14px 0;
+    margin: 38px 14px 0;
     font-family: @display;
     font-style: italic;
     text-align: center;
     line-height: 1.5;
     color: @ink_dim;
-    font-size: 18px;
-    letter-spacing: 0.01em;
+    font-size: 21px;
+    letter-spacing: 0.005em;
   }
 
   &__btn {
-    margin: 32px auto 0;
-    padding: 14px 34px;
-    background: rgba(212, 165, 116, 0.05);
-    border: 1px solid @ember;
-    color: @ember_hot;
-    font-family: @display;
-    font-style: italic;
-    font-weight: 500;
-    font-size: 19px;
-    letter-spacing: 0.05em;
-    border-radius: 2px;
+    margin: 30px auto 0;
+    padding: 13px 32px;
+    background: rgba(201, 168, 106, 0.04);
+    border: 1px solid @gold;
+    color: @gold_hot;
+    font-family: @ui;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.06em;
+    border-radius: 3px;
     cursor: pointer;
     touch-action: manipulation;
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 9px;
+    transition: background 0.18s ease, border-color 0.18s ease;
 
-    &:active { background: rgba(212, 165, 116, 0.14); }
+    &:active { background: rgba(201, 168, 106, 0.12); }
 
     &:disabled {
       cursor: default;
-      border-color: rgba(160, 139, 114, 0.32);
-      color: @ink_dim;
-      font-style: normal;
+      border-color: rgba(107, 111, 120, 0.4);
+      color: @ink_faint;
       font-variant-numeric: tabular-nums;
       letter-spacing: 0.08em;
-      background: rgba(212, 165, 116, 0.02);
+      background: transparent;
     }
 
     &:disabled .tsi-awake__btn-mark { opacity: 0.3; }
   }
 
   &__btn-mark {
-    font-size: 11px;
+    font-size: 10px;
     transform: translateY(-1px);
-    opacity: 0.7;
+    color: @gold;
+    opacity: 0.8;
   }
 
   &__ledger {
@@ -249,13 +253,14 @@
     background: transparent;
     border: none;
     color: @ink_dim;
-    font-family: @display;
-    font-style: italic;
-    font-size: 15px;
+    font-family: @ui;
+    font-size: 13px;
+    font-weight: 500;
     text-decoration: underline;
     text-underline-offset: 4px;
+    text-decoration-color: @rule;
     cursor: pointer;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.02em;
   }
 
   &__dev {
@@ -264,9 +269,9 @@
     left: 0; right: 0;
     text-align: center;
     color: @ink_ghost;
-    font-size: 10.5px;
-    font-style: italic;
-    letter-spacing: 0.08em;
+    font-family: @ui;
+    font-size: 10px;
+    letter-spacing: 0.06em;
   }
 }
 
@@ -278,9 +283,9 @@
   inset: 0;
   z-index: 2;
   background:
-    radial-gradient(ellipse at 50% 30%, #221710 0%, @bg_deep 60%),
+    radial-gradient(ellipse at 50% 28%, #161b24 0%, @bg_deep 62%),
     @bg_deep;
-  box-shadow: inset 0 0 180px 50px rgba(0, 0, 0, 0.7);   // vignette toward center
+  box-shadow: inset 0 0 180px 50px rgba(0, 0, 0, 0.72);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -305,12 +310,11 @@
 
   &__brand {
     font-family: @display;
-    font-style: italic;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 30px;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.12em;
     color: @ink;
-    opacity: 0.9;
+    opacity: 0.92;
   }
 
   &__ghost-stack {
@@ -323,19 +327,18 @@
 
   &__ghost {
     font-family: @display;
-    font-style: italic;
     font-weight: 500;
     font-size: 68px;
     color: @ink_ghost;
-    letter-spacing: 0.03em;
-    text-shadow: 0 0 14px rgba(239, 226, 205, 0.05);
+    letter-spacing: 0.02em;
+    text-shadow: 0 0 14px rgba(232, 230, 224, 0.04);
     line-height: 1;
 
-    // Double-exposure echo — drifts off the real name like a second negative
+    // Double-exposure echo — a cold second negative drifting off the name.
     &--echo {
       position: absolute;
       top: 0;
-      color: rgba(197, 138, 122, 0.52);
+      color: rgba(110, 139, 168, 0.55);
       filter: blur(2.4px);
       mix-blend-mode: screen;
       animation: tsi-ghost-drift 5.4s ease-in-out infinite;
@@ -345,12 +348,12 @@
   &__caption {
     font-family: @display;
     font-style: italic;
-    font-size: 18px;
+    font-size: 19px;
     color: @ink_dim;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.02em;
     margin-top: 8px;
 
-    &--sunrise { color: @sepia; font-size: 24px; letter-spacing: 0.10em; }
+    &--sunrise { color: @gold_hot; font-style: normal; font-weight: 500; font-size: 24px; letter-spacing: 0.08em; }
   }
 
   &__sunrise {
@@ -360,8 +363,8 @@
     bottom: -50%;
     height: 90%;
     background:
-      radial-gradient(closest-side at 50% 0%, rgba(232, 184, 120, 0.85), rgba(232, 184, 120, 0)),
-      radial-gradient(closest-side at 50% 30%, rgba(197, 138, 122, 0.55), rgba(197, 138, 122, 0));
+      radial-gradient(closest-side at 50% 0%, rgba(220, 192, 132, 0.82), rgba(220, 192, 132, 0)),
+      radial-gradient(closest-side at 50% 30%, rgba(201, 168, 106, 0.5), rgba(201, 168, 106, 0));
     opacity: 0;
     pointer-events: none;
     transform: translateY(40%);
@@ -440,8 +443,8 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes tsi-ghost-drift {
-  0%, 100% { transform: translate(0, 0);      opacity: 0.30; letter-spacing: 0.03em; }
-  50%      { transform: translate(6px, -5px); opacity: 0.66; letter-spacing: 0.055em; }
+  0%, 100% { transform: translate(0, 0);      opacity: 0.30; letter-spacing: 0.02em; }
+  50%      { transform: translate(6px, -5px); opacity: 0.66; letter-spacing: 0.045em; }
 }
 @keyframes tsi-sunrise {
   0%   { opacity: 0; transform: translateY(80%); }
@@ -450,7 +453,7 @@
 }
 
 // ═══════════════════════════════════════════════════════════════════════
-// REVIEW — paper letters with stamps
+// REVIEW — dark letterpress panels, editorial sign-off
 // ═══════════════════════════════════════════════════════════════════════
 .tsi-review {
   &__date {
@@ -459,19 +462,20 @@
 
   &__title {
     font-family: @display;
-    margin-top: 8px;
-    font-size: 39px;
-    font-style: italic;
-    font-weight: 500;
-    line-height: 1.14;
+    margin-top: 10px;
+    font-size: 40px;
+    font-weight: 600;
+    line-height: 1.1;
+    color: @ink;
   }
 
+  // The accusing line — serif italic voice.
   &__subtitle {
     font-family: @display;
+    font-style: italic;
     margin-top: 10px;
     color: @ink_dim;
-    font-style: italic;
-    font-size: 18px;
+    font-size: 19px;
     line-height: 1.45;
   }
 
@@ -479,7 +483,7 @@
     margin-top: 26px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 18px;
     flex: 1;
     overflow-y: auto;
     padding-bottom: 8px;
@@ -487,21 +491,21 @@
 
   &__finish {
     margin-top: 16px;
-    padding: 13px 28px;
-    background: transparent;
-    border: 1px solid @ember;
-    color: @ember_hot;
-    font-family: @display;
-    font-style: italic;
-    font-weight: 500;
-    font-size: 18px;
+    padding: 12px 28px;
+    background: rgba(201, 168, 106, 0.04);
+    border: 1px solid @gold;
+    color: @gold_hot;
+    font-family: @ui;
+    font-weight: 600;
+    font-size: 15px;
     letter-spacing: 0.05em;
-    border-radius: 2px;
+    border-radius: 3px;
     align-self: center;
     cursor: pointer;
     touch-action: manipulation;
 
-    &:disabled { opacity: 0.25; cursor: default; }
+    &:active { background: rgba(201, 168, 106, 0.12); }
+    &:disabled { opacity: 0.28; cursor: default; background: transparent; }
   }
 }
 
@@ -509,72 +513,69 @@
   position: relative;
 
   &__paper {
-    background:
-      radial-gradient(ellipse at 28% 0%, rgba(255, 248, 230, 0.5), transparent 58%),
-      linear-gradient(170deg, @bg_paper, @bg_paper_2);
-    color: @paper_ink;
-    border-radius: 1px;
-    padding: 20px 18px 40px;
+    background: linear-gradient(168deg, @panel_2, @panel);
+    color: @ink;
+    border: 1px solid @rule;
+    border-radius: 4px;
+    padding: 18px 18px 44px;
     position: relative;
     box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.18) inset,
-      0 10px 26px rgba(0, 0, 0, 0.45);
-    // Torn-bottom illusion
-    clip-path: polygon(
-      0 0, 100% 0, 100% 96%,
-      94% 100%, 88% 96%, 80% 100%, 72% 97%, 64% 100%, 56% 98%, 48% 100%,
-      40% 96%, 32% 100%, 24% 97%, 16% 100%, 8% 96%, 0 100%
-    );
+      0 1px 0 rgba(255, 255, 255, 0.04) inset,
+      0 10px 26px rgba(0, 0, 0, 0.4);
   }
 
   &__label {
-    font-family: @body;
-    font-size: 10px;
-    color: rgba(58, 44, 30, 0.55);
-    letter-spacing: 0.18em;
+    font-family: @ui;
+    font-size: 9.5px;
+    font-weight: 600;
+    color: @ink_faint;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
     margin-bottom: 12px;
   }
 
+  // The borrowed words — serif italic on dark.
   &__body {
     position: relative;
     font-family: @display;
     font-style: italic;
-    line-height: 1.4;
-    font-size: 23px;
-    color: @paper_ink;
+    line-height: 1.38;
+    font-size: 24px;
+    color: @ink;
     margin-bottom: 18px;
     min-height: 26px;
-    padding-left: 26px;
+    padding-left: 24px;
   }
 
-  // Oversized hanging opening quote, like a magazine pull-quote
+  // Oversized hanging opening quote.
   &__quote::before {
     content: '\201C';
     position: absolute;
     left: -6px;
-    top: -12px;
+    top: -10px;
     font-family: @display;
     font-style: italic;
-    font-size: 58px;
+    font-size: 56px;
     line-height: 1;
-    color: rgba(58, 44, 30, 0.28);
+    color: rgba(201, 168, 106, 0.4);
   }
-  &__quote::after { content: '\201D'; color: rgba(58, 44, 30, 0.5); }
+  &__quote::after { content: '\201D'; color: rgba(201, 168, 106, 0.55); }
 
   &__ghost {
-    color: @blood;
-    font-size: 18px;
-    letter-spacing: 0.03em;
+    font-family: @ui;
+    color: @brick_dim;
+    font-size: 15px;
+    letter-spacing: 0.02em;
   }
 
   &__stamp {
     position: absolute;
     right: 14px;
-    bottom: 22px;
-    transform: rotate(-12deg);
+    bottom: 20px;
+    transform: rotate(-11deg);
     pointer-events: none;
-    mix-blend-mode: multiply;       // ink bleeds into the paper
+    mix-blend-mode: screen;          // glows on dark instead of bleeding into paper
+    opacity: 0.9;
     animation: tsi-stamp-press 0.4s ease-out;
   }
 
@@ -590,52 +591,53 @@
     background: transparent;
     border: 1px solid @ink_ghost;
     color: @ink_dim;
-    font-family: @display;
-    font-style: italic;
-    font-weight: 500;
-    font-size: 17px;
-    letter-spacing: 0.05em;
-    border-radius: 2px;
+    font-family: @ui;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.04em;
+    border-radius: 3px;
     cursor: pointer;
     touch-action: manipulation;
 
-    &--disavow { border-color: @blood; color: @rose; }
-    &--approve { border-color: @ember; color: @ember_hot; }
+    &--disavow { border-color: rgba(184, 92, 78, 0.6); color: @brick_dim; }
+    &--approve { border-color: @gold; color: @gold_hot; }
 
     &:active { transform: translateY(1px); }
   }
 
   &--approved {
     .tsi-action__paper {
+      border-color: rgba(201, 168, 106, 0.4);
       box-shadow:
-        0 1px 0 rgba(255, 255, 255, 0.18) inset,
-        0 10px 26px rgba(199, 149, 103, 0.22);
+        0 1px 0 rgba(255, 255, 255, 0.04) inset,
+        0 0 0 1px rgba(201, 168, 106, 0.12),
+        0 10px 26px rgba(0, 0, 0, 0.4);
     }
   }
 
   &--disavowed {
     .tsi-action__paper {
-      background:
-        radial-gradient(ellipse at 28% 0%, rgba(154, 74, 68, 0.20), transparent 58%),
-        linear-gradient(170deg, #e3d0ad, #c8b287);
+      border-color: rgba(184, 92, 78, 0.4);
+      background: linear-gradient(168deg, #1d1719, #16131410);
+      opacity: 0.92;
     }
   }
 }
 
 @keyframes tsi-stamp-press {
-  0%   { transform: rotate(-12deg) scale(2.2); opacity: 0; }
-  50%  { transform: rotate(-15deg) scale(1.1); opacity: 1; }
-  100% { transform: rotate(-12deg) scale(1);   opacity: 1; }
+  0%   { transform: rotate(-11deg) scale(2.2); opacity: 0; }
+  50%  { transform: rotate(-14deg) scale(1.1); opacity: 0.9; }
+  100% { transform: rotate(-11deg) scale(1);   opacity: 0.9; }
 }
 
-// Renter signature line on each paper card (a button → opens profile)
+// Renter signature line on each panel (a button → opens profile).
 .tsi-rentermark {
   display: flex;
   align-items: center;
   gap: 8px;
   position: absolute;
   left: 18px;
-  bottom: 22px;
+  bottom: 18px;
   max-width: 62%;
   min-width: 0;
   margin: 0;
@@ -654,15 +656,15 @@
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    border: 1px solid rgba(58, 44, 30, 0.4);
-    background: rgba(58, 44, 30, 0.06);
+    border: 1px solid @rule;
+    background: rgba(233, 230, 224, 0.04);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: @display;
-    font-style: italic;
-    font-size: 13px;
-    color: @paper_ink;
+    font-family: @ui;
+    font-weight: 600;
+    font-size: 12px;
+    color: @ink_dim;
   }
 
   &__avatar {
@@ -671,16 +673,16 @@
     height: 24px;
     border-radius: 50%;
     object-fit: cover;
-    border: 1px solid rgba(58, 44, 30, 0.4);
+    border: 1px solid @rule;
     pointer-events: none;
   }
 
   &__name {
-    font-family: @display;
-    font-style: italic;
-    font-size: 17px;
-    color: rgba(58, 44, 30, 0.7);
-    letter-spacing: 0.02em;
+    font-family: @ui;
+    font-weight: 500;
+    font-size: 13px;
+    color: @ink_dim;
+    letter-spacing: 0.01em;
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -688,7 +690,7 @@
   }
 }
 
-// SVG stamp tweaks
+// SVG stamp
 .tsi-stamp { display: block; }
 
 // ═══════════════════════════════════════════════════════════════════════
@@ -706,21 +708,21 @@
     background: transparent;
     border: none;
     color: @ink_dim;
-    font-family: @display;
-    font-style: italic;
-    font-size: 17px;
+    font-family: @ui;
+    font-weight: 500;
+    font-size: 14px;
     cursor: pointer;
     padding: 4px 0;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.02em;
   }
 
   &__title {
     font-family: @display;
-    font-style: italic;
-    font-weight: 500;
-    font-size: 28px;
+    font-weight: 600;
+    font-size: 30px;
     flex: 1;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.01em;
+    color: @ink;
   }
 
   &__empty {
@@ -729,7 +731,7 @@
     color: @ink_dim;
     font-family: @display;
     font-style: italic;
-    font-size: 18px;
+    font-size: 19px;
   }
 
   &__list {
@@ -754,24 +756,25 @@
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: @ember;
-      box-shadow: 0 0 10px rgba(232, 184, 120, 0.6);
+      background: @gold;
+      box-shadow: 0 0 10px rgba(201, 168, 106, 0.55);
     }
   }
 
   &__row-head {
     margin-bottom: 8px;
-    font-family: @body;
-    font-size: 10px;
-    color: @ink_dim;
-    letter-spacing: 0.18em;
+    font-family: @ui;
+    font-size: 9.5px;
+    font-weight: 600;
+    color: @ink_faint;
+    letter-spacing: 0.2em;
     text-transform: uppercase;
   }
 
   &__renter {
-    font-family: @display;
-    font-style: italic;
-    font-size: 16px;
+    font-family: @ui;
+    font-weight: 500;
+    font-size: 13px;
     text-transform: none;
     letter-spacing: 0.01em;
     margin-left: 6px;
@@ -783,10 +786,10 @@
       padding: 0;
       cursor: pointer;
       touch-action: manipulation;
-      color: @ember;
+      color: @gold;
       text-decoration: underline;
       text-underline-offset: 3px;
-      text-decoration-color: rgba(199, 149, 103, 0.45);
+      text-decoration-color: rgba(201, 168, 106, 0.45);
 
       &:active { opacity: 0.6; }
     }
@@ -794,6 +797,7 @@
 
   &__row-body { display: flex; flex-direction: column; gap: 8px; }
 
+  // Logged borrowed words — serif italic.
   &__act {
     display: flex;
     gap: 10px;
@@ -803,14 +807,16 @@
     line-height: 1.4;
     color: @ink;
 
-    &--disavowed { color: @rose; }
+    &--disavowed { color: @brick_dim; }
     &--pending { color: @ink_dim; }
   }
 
   &__kind {
     flex: 0 0 16px;
-    color: @ember;
+    color: @gold;
     font-style: normal;
+    font-family: @ui;
+    font-size: 13px;
   }
 }
 
@@ -828,12 +834,13 @@
 
   &__wall-title {
     text-align: center;
-    color: @sepia;
-    font-family: @body;
-    font-size: 10px;
+    color: @gold;
+    font-family: @ui;
+    font-size: 9.5px;
+    font-weight: 600;
     letter-spacing: 0.22em;
     text-transform: uppercase;
-    opacity: 0.7;
+    opacity: 0.78;
     margin-bottom: 12px;
   }
 
@@ -842,11 +849,11 @@
     align-items: center;
     justify-content: space-between;
     gap: 10px;
-    padding: 8px 2px;
+    padding: 9px 2px;
     cursor: pointer;
     touch-action: manipulation;
 
-    & + & { border-top: 1px solid rgba(212, 165, 116, 0.12); }
+    & + & { border-top: 1px solid @rule_soft; }
     &:active { opacity: 0.6; }
   }
 
@@ -872,7 +879,7 @@
     border-radius: 50%;
     object-fit: cover;
     border: 1px solid @rule;
-    filter: grayscale(0.35) brightness(0.92);
+    filter: grayscale(0.4) brightness(0.92);
     pointer-events: none;
   }
 
@@ -882,22 +889,22 @@
     height: 26px;
     border-radius: 50%;
     border: 1px solid @rule;
-    background: rgba(212, 165, 116, 0.06);
+    background: rgba(233, 230, 224, 0.04);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: @display;
-    font-style: italic;
-    font-size: 14px;
-    color: @ember;
+    font-family: @ui;
+    font-weight: 600;
+    font-size: 12px;
+    color: @ink_dim;
   }
 
   &__sleeper-name {
-    font-family: @display;
-    font-style: italic;
-    font-size: 18px;
+    font-family: @ui;
+    font-weight: 500;
+    font-size: 15px;
     color: @ink;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.01em;
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -906,12 +913,12 @@
 
   &__sleeper-cta {
     flex: 0 0 auto;
-    font-family: @display;
-    font-style: italic;
-    font-size: 14px;
-    color: @ember;
-    letter-spacing: 0.02em;
-    opacity: 0.9;
+    font-family: @ui;
+    font-weight: 600;
+    font-size: 12px;
+    color: @gold;
+    letter-spacing: 0.03em;
+    opacity: 0.92;
   }
 }
 
@@ -929,28 +936,28 @@
     background: transparent;
     border: none;
     color: @ink_dim;
-    font-family: @display;
-    font-style: italic;
-    font-size: 17px;
+    font-family: @ui;
+    font-weight: 500;
+    font-size: 14px;
     cursor: pointer;
     padding: 4px 0;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.02em;
   }
 
   &__title {
     font-family: @display;
-    font-style: italic;
-    font-weight: 500;
-    font-size: 32px;
-    letter-spacing: 0.02em;
-    line-height: 1.15;
+    font-weight: 600;
+    font-size: 34px;
+    letter-spacing: 0.005em;
+    line-height: 1.12;
+    color: @ink;
     margin-bottom: 18px;
   }
 
   &__who {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    gap: 9px;
     align-self: flex-start;
     max-width: 100%;
     background: none;
@@ -979,22 +986,22 @@
     height: 30px;
     border-radius: 50%;
     border: 1px solid @rule;
-    background: rgba(212, 165, 116, 0.06);
+    background: rgba(233, 230, 224, 0.04);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: @display;
-    font-style: italic;
-    font-size: 15px;
-    color: @ember;
+    font-family: @ui;
+    font-weight: 600;
+    font-size: 14px;
+    color: @ink_dim;
   }
 
   &__who-name {
-    font-family: @display;
-    font-style: italic;
-    font-size: 19px;
-    color: @ink;
-    letter-spacing: 0.02em;
+    font-family: @ui;
+    font-weight: 500;
+    font-size: 15px;
+    color: @ink_dim;
+    letter-spacing: 0.01em;
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1012,67 +1019,69 @@
     padding: 10px 8px;
     background: transparent;
     border: 1px solid @rule;
-    border-radius: 2px;
+    border-radius: 3px;
     color: @ink_dim;
-    font-family: @display;
-    font-style: italic;
-    font-size: 15px;
+    font-family: @ui;
+    font-weight: 500;
+    font-size: 13px;
     letter-spacing: 0.02em;
     cursor: pointer;
     touch-action: manipulation;
 
     &--on {
-      border-color: @ember;
-      color: @ember_hot;
-      background: rgba(212, 165, 116, 0.06);
+      border-color: @gold;
+      color: @gold_hot;
+      background: rgba(201, 168, 106, 0.06);
     }
   }
 
-  // Cream paper — you're forging on their page.
+  // A dark field — you're writing on their page, in their voice (serif).
   &__input {
     flex: 1;
     min-height: 150px;
     resize: none;
-    padding: 16px 16px;
-    background:
-      linear-gradient(180deg, @bg_paper 0%, @bg_paper_2 100%);
-    border: none;
-    border-radius: 3px;
-    color: @paper_ink;
-    font-family: @body;
-    font-size: 15px;
-    line-height: 1.6;
-    letter-spacing: 0.01em;
-    box-shadow: inset 0 1px 6px rgba(58, 44, 30, 0.18);
+    padding: 16px;
+    background: @panel;
+    border: 1px solid @rule;
+    border-radius: 4px;
+    color: @ink;
+    font-family: @display;
+    font-style: italic;
+    font-size: 19px;
+    line-height: 1.5;
+    letter-spacing: 0.005em;
+    box-shadow: inset 0 1px 6px rgba(0, 0, 0, 0.3);
     outline: none;
+    transition: border-color 0.18s ease;
+
+    &:focus { border-color: rgba(201, 168, 106, 0.5); }
 
     &::placeholder {
-      color: rgba(58, 44, 30, 0.45);
+      color: @ink_faint;
       font-style: italic;
     }
   }
 
   &__publish {
     margin: 18px auto 0;
-    padding: 13px 30px;
-    background: rgba(212, 165, 116, 0.05);
-    border: 1px solid @ember;
-    color: @ember_hot;
-    font-family: @display;
-    font-style: italic;
-    font-weight: 500;
-    font-size: 18px;
-    letter-spacing: 0.04em;
-    border-radius: 2px;
+    padding: 12px 30px;
+    background: rgba(201, 168, 106, 0.04);
+    border: 1px solid @gold;
+    color: @gold_hot;
+    font-family: @ui;
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.05em;
+    border-radius: 3px;
     cursor: pointer;
     touch-action: manipulation;
 
-    &:active { background: rgba(212, 165, 116, 0.14); }
+    &:active { background: rgba(201, 168, 106, 0.12); }
 
     &:disabled {
       cursor: default;
-      border-color: rgba(160, 139, 114, 0.3);
-      color: @ink_dim;
+      border-color: rgba(107, 111, 120, 0.4);
+      color: @ink_faint;
       background: transparent;
     }
   }
@@ -1085,9 +1094,9 @@
     text-align: center;
     font-family: @display;
     font-style: italic;
-    font-size: 24px;
-    color: @ember_hot;
-    letter-spacing: 0.03em;
-    text-shadow: 0 0 14px rgba(232, 184, 120, 0.4);
+    font-size: 25px;
+    color: @gold_hot;
+    letter-spacing: 0.02em;
+    text-shadow: 0 0 14px rgba(220, 192, 132, 0.3);
   }
 }
