@@ -1,4 +1,5 @@
 import { NightAction, Renter, Self } from './types';
+import type { SleepingUser } from './hooks/useGhostWall';
 
 // Until pairing engine is wired, the renter is hard-coded.
 // Cycle through a few candidates so re-runs feel varied.
@@ -15,6 +16,19 @@ export function fixtureRenter(): Renter {
   const r = renterPool[rotation % renterPool.length];
   rotation += 1;
   return r;
+}
+
+// Template sleepers — shown on the awake screen when the wall has no real
+// sleeping friends, so "stand in for someone" is always something you can do
+// (never a dead end, even during the sleep cooldown). Same canonical cast as
+// the renter pool. since-offsets are staggered so the strip reads as a few
+// people who drifted off at different times tonight.
+export function fixtureSleepers(now: number): SleepingUser[] {
+  return [
+    { userId: 'tpl_jenny', name: 'Jenny', avatarUrl: '', since: now - 22 * 60_000, synthetic: true },
+    { userId: 'tpl_algram', name: 'Algram', avatarUrl: '', since: now - 51 * 60_000, synthetic: true },
+    { userId: 'tpl_ghostpixel', name: 'ghostpixel', avatarUrl: '', since: now - 134 * 60_000, synthetic: true },
+  ];
 }
 
 export function fixtureSelf(): Self {

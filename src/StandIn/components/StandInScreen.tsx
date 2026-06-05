@@ -21,7 +21,7 @@ export default function StandInScreen({
   const [body, setBody] = useState('');
   const [done, setDone] = useState(false);
 
-  const tappable = inAigram && !!target.userId;
+  const tappable = inAigram && !!target.userId && !target.synthetic;
   const trimmed = body.trim();
 
   const publish = () => {

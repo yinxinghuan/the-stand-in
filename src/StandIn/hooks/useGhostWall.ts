@@ -45,6 +45,10 @@ export interface SleepingUser {
   name: string;
   avatarUrl: string;
   since: number;
+  // True for template sleepers seeded when the wall has no real ones, so the
+  // "stand in for someone" half is never empty. Synthetic users have no real
+  // Aigram profile — their avatar/name chip must not be tappable.
+  synthetic?: boolean;
 }
 
 export interface UseGhostWall {

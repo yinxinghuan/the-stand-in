@@ -12,7 +12,11 @@ import {
   StandInAct,
   Verdict,
 } from '../types';
-import { fixtureNightActions, fixtureRenter } from '../fixtures';
+import {
+  fixtureNightActions,
+  fixtureRenter,
+  fixtureSleepers,
+} from '../fixtures';
 import { useAigram } from './useAigram';
 import { useGhostWall, SleepingUser } from './useGhostWall';
 
@@ -117,6 +121,16 @@ export function useStandIn() {
   useEffect(() => {
     actsRef.current = actsAboutMe;
   }, [actsAboutMe]);
+
+  // Who you can stand in for. Real sleepers from the wall take priority; when
+  // none are asleep (early days, empty wall, single-player) fall back to a
+  // template cast so the awake screen always offers something to do — including
+  // during the sleep cooldown. Templates are stable across renders.
+  const templateSleepers = useRef<SleepingUser[]>(
+    fixtureSleepers(Date.now()),
+  ).current;
+  const displaySleepers =
+    sleepingUsers.length > 0 ? sleepingUsers : templateSleepers;
 
   // Cooldown gate — ticking remaining time until the next night is allowed.
   const [now, setNow] = useState(() => Date.now());
@@ -227,6 +241,9 @@ export function useStandIn() {
   const standInFor = useCallback(
     (target: SleepingUser, actions: NightAction[]) => {
       if (!self.id || actions.length === 0) return;
+      // Template sleeper — there's no real wall row to publish to, so let the
+      // compose screen run its course for the experience but write nothing.
+      if (target.synthetic) return;
       const act: StandInAct = {
         id: `act_${self.id}_${Date.now()}_${Math.random()
           .toString(36)
@@ -277,7 +294,7 @@ export function useStandIn() {
     inAigram,
     canSleep,
     cooldownRemaining,
-    sleepingUsers,
+    sleepingUsers: displaySleepers,
     tuckIn,
     judge,
     finishReview,

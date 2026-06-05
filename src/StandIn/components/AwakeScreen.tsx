@@ -97,10 +97,10 @@ export default function AwakeScreen({
               <button
                 type="button"
                 className="tsi-awake__sleeper-who"
-                disabled={!inAigram}
+                disabled={!inAigram || !!u.synthetic}
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (inAigram) openAigramProfile(u.userId);
+                  if (inAigram && !u.synthetic) openAigramProfile(u.userId);
                 }}
               >
                 {u.avatarUrl ? (
