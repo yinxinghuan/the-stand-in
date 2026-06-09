@@ -232,10 +232,37 @@ export function useStandIn() {
       sleeping: null,
       consumedActIds: nextConsumed,
     });
+    // Notify the stand-in author with the aggregated verdict. Real-acts
+    // nights have a non-empty pendingActIdsRef; fixture-renter nights
+    // don't (we don't notify a fictional renter).
+    const fromRealActs = pendingActIdsRef.current.length > 0;
+    const authorId = pendingNight.renter.id;
+    if (fromRealActs && authorId && authorId !== self.id) {
+      const approved = finalized.verdicts.filter((v) => v === 'approved').length;
+      const disavowed = finalized.verdicts.filter((v) => v === 'disavowed').length;
+      const tmpl =
+        disavowed === 0
+          ? '{sender_name} claimed everything you did as them.'
+          : approved === 0
+          ? "{sender_name} disowned everything you did as them."
+          : `{sender_name} reviewed last night: ${approved} claimed, ${disavowed} disowned.`;
+      events.trigger('stand_in_judged', {
+        actions: [
+          {
+            type: 'notify',
+            target_user_id: authorId,
+            message: {
+              template: tmpl,
+              variables: ['sender_name'],
+            },
+          },
+        ],
+      });
+    }
     pendingActIdsRef.current = [];
     setPendingNight(null);
     setPhase('awake');
-  }, [pendingNight, history, consumedActIds, commit]);
+  }, [pendingNight, history, consumedActIds, commit, events, self.id]);
 
   // Producer side — stand in for a currently-sleeping friend by doing
   // something as them. Appended to my standIns (bounded) and published so the
