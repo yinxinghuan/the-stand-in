@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useGameSave } from '@shared/save';
+import { useGameEvent } from '@shared/runtime';
 import {
   COOLDOWN_MS,
   DEV_FAST_NIGHT,
@@ -72,6 +73,7 @@ function buildNightFromActs(acts: StandInAct[]): NightRecord {
 
 export function useStandIn() {
   const { self, friends, inAigram } = useAigram();
+  const events = useGameEvent();
 
   const [phase, setPhase] = useState<Phase>('awake');
   const [pendingNight, setPendingNight] = useState<NightRecord | null>(null);
@@ -261,8 +263,25 @@ export function useStandIn() {
       );
       commit({ standIns: nextStandIns });
       refreshWall();
+      // Notify the sleeper that someone took the floor as them. Steles
+      // are text-only acts (no raster asset), so we omit the image —
+      // platform falls back to game icon + AlterU avatar + text.
+      if (target.userId && target.userId !== self.id) {
+        events.trigger('stand_in_act', {
+          actions: [
+            {
+              type: 'notify',
+              target_user_id: target.userId,
+              message: {
+                template: '{sender_name} stood in for you while you slept.',
+                variables: ['sender_name'],
+              },
+            },
+          ],
+        });
+      }
     },
-    [self, commit, refreshWall],
+    [self, commit, refreshWall, events],
   );
 
   // Viewport scale to fit FIELD_W × FIELD_H proportionally.
